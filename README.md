@@ -4,6 +4,7 @@
 
 ### El Generador de Contraseñas Aleatorio es un buen ejercicio práctico en el que su forma simple se resuelve con pocas líneas y puede uno mismo "complicarlo" de forma sencilla también, añadiendo varias contraseñas a la vez, longitud de las mismas, etc.
 
+#### He cambiado la palabra contraseñas por passwords en el archivo .py para evitar conflictos con la letra 'ñ'
 
 ### Yo he querido "complicarlo" un poco, no sólo genera las contraseñas, si no que se le mete un input para que sea el usuario el que decida cuántas contraseñas necesita y de qué longitud.
 
