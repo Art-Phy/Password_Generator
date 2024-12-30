@@ -1,4 +1,4 @@
-# Bienvenid@s a mi Generador de Contraseñas Aleatorio
+## Bienvenid@s a mi Generador de Contraseñas Aleatorio
 
 #### Se trata de un pequeño ejercicio para practicar Python teniendo como objetivo crear un programa que genere contraseñas de caracteres aleatorios.
 
