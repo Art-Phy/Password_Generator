@@ -21,7 +21,7 @@
 ### ¿Qué pretendo con esto?
 
 #### Sencillamente nada, simplemente compartir mi día a día iniciándome en la programación, con Python en este caso. 
-### Soy partidario de que el conocimiento deber estar al alcance de todo el mundo, haciendo que todos podamos ayudarnos a crecer y mejorar.
+#### Soy partidario de que el conocimiento deber estar al alcance de todo el mundo, haciendo que todos podamos ayudarnos a crecer y mejorar.
 
 > ##### Si consideras útil el repositorio, apóyalo haciendo "★ Star" ¡Gracias!
 
