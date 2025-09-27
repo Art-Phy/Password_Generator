@@ -1,4 +1,4 @@
-## Bienvenid@s a mi Generador de Contraseñas Aleatorio
+### Bienvenid@s a mi Generador de Contraseñas Aleatorio
 
 ##### **El programa genera contraseñas de caracteres aleatorios**
 
@@ -19,5 +19,5 @@
 
 ---
 
-> [!TIP]
+> [!IMPORTANT]
 > ###### Si consideras útil el repositorio, apóyalo haciendo "★ Star" ¡Gracias!
