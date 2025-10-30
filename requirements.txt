@@ -1,0 +1,8 @@
+# Dependencias necesarias para Password_Generator v1.1.0
+
+# Módulos estándar (no requieren instalación):
+# - random
+# - string
+
+# No se requieren librerías externas.
+# Proyecto compatible con Python >= 3.8
