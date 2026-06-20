@@ -4,10 +4,7 @@ Command-line interface for Password Generator.
 This module contains the interactive entry point of the application.
 """
 
-from src.password_generator.generator import(
-    multiple_passwords_generator,
-    password_generator,
-)
+from src.password_generator.generator import generate_password, generate_passwords
 
 
 def main() -> None:
@@ -17,18 +14,18 @@ def main() -> None:
 
     while True:
         try:
-            cantidad = int(input("¿Cuántas contraseñas deseas generar? "))
-            longitud = int(input("¿De cuántos caracteres cada una? "))
+            count = int(input("¿Cuántas contraseñas deseas generar? "))
+            length = int(input("¿De cuántos caracteres cada una? "))
 
             passwords = (
-                multiple_passwords_generator(cantidad, longitud)
-                if cantidad < 1
-                else [password_generator(longitud)]
+                generate_passwords(count, length)
+                if count < 1
+                else [generate_password(length)]
             )
 
             print ("\nContraseñas generadas:\n")
-            for i, password in enumerate(passwords, start=1):
-                print(f"  {i}. {password}")
+            for index, password in enumerate(passwords, start=1):
+                print(f"  {index}. {password}")
 
         except ValueError as error:
             print(f"\n Error: {error}\nPor favor, introduce números válidos.")

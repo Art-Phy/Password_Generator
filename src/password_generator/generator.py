@@ -8,18 +8,18 @@ import string
 
 
 
-def password_generator(longitud: int) -> str:
-    if longitud <= 0:
+def generate_password(length: int) -> str:
+    if length <= 0:
         raise ValueError("La longitud debe ser un número positivo mayor que 0.")
     
-    caracteres = string.ascii_letters + string.digits + string.punctuation
+    characters = string.ascii_letters + string.digits + string.punctuation
 
-    return "".join(secrets.choice(caracteres) for _ in range(longitud))
+    return "".join(secrets.choice(characters) for _ in range(length))
 
 
 
-def multiple_passwords_generator(cantidad: int, longitud: int) -> list[str]:
-    if cantidad <= 0:
+def generate_passwords(count: int, length: int) -> list[str]:
+    if count <= 0:
         raise ValueError("La cantidad debe ser mayor que 0.")
     
-    return [password_generator(longitud) for _ in range(cantidad)]
+    return [generate_password(length) for _ in range(count)]
