@@ -19,7 +19,7 @@ def main() -> None:
 
             passwords = (
                 generate_passwords(count, length)
-                if count < 1
+                if count > 1
                 else [generate_password(length)]
             )
 
