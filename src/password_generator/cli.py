@@ -4,7 +4,7 @@ Command-line interface for Password Generator.
 This module contains the interactive entry point of the application.
 """
 
-from src.password_generator.generator import generate_password, generate_passwords
+from password_generator.generator import generate_password, generate_passwords
 
 
 def main() -> None:

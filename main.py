@@ -1,5 +1,5 @@
 
-from src.password_generator.cli import main
+from password_generator.cli import main
 
 if __name__ == "__main__":
     main()
