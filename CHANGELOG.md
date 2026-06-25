@@ -1,24 +1,58 @@
-## 📜 CHANGELOG
+## CHANGELOG
 
-### [v1.1.0] - 2025-10-29
+All notable changes to this project will be documented in this file.
 
-#### 🚀 Mejoras principales
-- Estructura del proyecto dividida en módulos (`main.py` y `utils.py`).
-- Implementación de validaciones de entrada y manejo de excepciones.
-- Añadido control de flujo para repetir o salir del programa.
-- Preparado para futuras pruebas unitarias y mejoras CLI.
-
-#### 🧩 Cambios técnicos
-- `password_generator()` ahora lanza `ValueError` en caso de longitud inválida.
-- Añadido `multiple_passwords_generator()` con validación de cantidad.
-- Documentación en formato docstring para todas las funciones.
-- Uso del patrón `if __name__ == "__main__":` en `main.py`.
-
-#### 🧰 Otros
-- Creado archivo `requirements.txt` (sin dependencias externas).
-- Comentarios y estructura del código más clara y profesional.
-- Preparado para etiquetado `v1.1.0` y flujo de versiones en GitHub.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to Semantic Versioning.
 
 ---
-> [!TIP]
-> Si encuentras útil este proyecto, ¡apóyalo haciendo clic en "★ Star" en el repositorio! 🚀
+
+### [1.2.0] - 2026-06-25
+
+#### Added
+
+- Complete project restructuring following the `src/` layout.
+- Added packaging support using `pyproject.toml`.
+- Added installable `password-generator` command.
+- Added CLI argument support using `argparse`.
+- Added both interactive and non-interactive execution modes.
+- Added automated tests with `pytest`.
+- Added `pytest` configuration to `pyproject.toml`.
+
+#### Changed
+
+- Replaced the `random` module with `secrets` for cryptographically secure password generation.
+- Renamed the main functions to `generate_password()` and `generate_passwords()`.
+- Refactored the project structure to separate user interface from business logic.
+- Improved internal code organization and readability.
+- Updated the project documentation.
+
+#### Fixed
+
+- Fixed multiple password generation in interactive mode.
+- Improved input parameter validation.
+- Removed temporary files and unnecessary repository artifacts.
+- Updated `.gitignore` to properly exclude development-generated files.
+
+---
+
+### [1.1.0] - 2025-10-29
+
+#### Main Improvements
+
+- Refactored the project into separate modules (`main.py` and `utils.py`).
+- Added input validation and exception handling.
+- Added program flow control to allow generating multiple passwords without restarting.
+- Prepared the project for future unit testing and CLI improvements.
+
+#### Technical Changes
+
+- `password_generator()` now raises `ValueError` for invalid password lengths.
+- Added `multiple_passwords_generator()` with input validation.
+- Added docstrings to all functions.
+- Adopted the `if __name__ == "__main__":` execution pattern in `main.py`.
+
+#### Other
+
+- Added `requirements.txt` (no external dependencies).
+- Improved code comments and overall project structure.
+- Prepared the project for the `v1.1.0` release and GitHub versioning workflow.
