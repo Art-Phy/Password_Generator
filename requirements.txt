@@ -1,4 +1,4 @@
-# Dependencias necesarias para Password_Generator v1.1.0
+# Dependencias necesarias para Password_Generator v1.2.0
 
 # Módulos estándar (no requieren instalación):
 # - random

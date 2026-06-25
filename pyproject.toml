@@ -1,0 +1,18 @@
+
+[project]
+name = "password-generator"
+version = "1.2.0"
+description = "Secure password generator built with Python."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "Art-Phy"}
+]
+license = {text = "MIT"}
+
+[project.scripts]
+password-generator = "password_generator.cli:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
