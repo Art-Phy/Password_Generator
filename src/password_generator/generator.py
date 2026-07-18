@@ -38,15 +38,15 @@ def build_character_pool(
 
 
 def generate_password(
-        lenght: int,
-        use_lowercase: bool = True,
-        use_uppercase: bool = True,
-        use_numbers: bool = True,
-        use_symbols: bool = True,
+    length: int,
+    use_lowercase: bool = True,
+    use_uppercase: bool = True,
+    use_numbers: bool = True,
+    use_symbols: bool = True,
 ) -> str:
     """Generate a cryptographically secure password"""
 
-    if lenght <= 0:
+    if length <= 0:
         raise ValueError("Password length must be greater than zero.")
     
     characters = build_character_pool(
@@ -56,7 +56,7 @@ def generate_password(
         use_symbols=use_symbols,
     )
 
-    return "".join(secrets.choice(characters) for _ in range(lenght))
+    return "".join(secrets.choice(characters) for _ in range(length))
 
 
 
@@ -76,7 +76,7 @@ def generate_passwords(
     
     return [
         generate_password(
-            lenght=length,
+            length=length,
             use_lowercase=use_lowercase,
             use_uppercase=use_uppercase,
             use_numbers=use_numbers,

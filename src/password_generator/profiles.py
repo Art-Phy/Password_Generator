@@ -10,7 +10,7 @@ class PasswordProfile:
     """Configuration for a predefined password generation profile"""
 
     length: int
-    use_lowecase: bool = True
+    use_lowercase: bool = True
     use_uppercase: bool = True
     use_numbers: bool = True
     use_symbols: bool = True
@@ -27,7 +27,7 @@ PROFILES: dict[str, PasswordProfile] = {
     ),
     "pin": PasswordProfile(
         length=6,
-        use_lowecase=False,
+        use_lowercase=False,
         use_uppercase=False,
         use_numbers=True,
         use_symbols=False,
@@ -36,3 +36,13 @@ PROFILES: dict[str, PasswordProfile] = {
         length=32,
     ),
 }
+
+
+
+def get_profile(name: str) -> PasswordProfile:
+    """Return a predefined password generation profile"""
+
+    try:
+        return PROFILES[name]
+    except KeyError as exc:
+        raise ValueError(f"Unkown profile: {name}") from exc
