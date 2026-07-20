@@ -9,6 +9,7 @@ import argparse
 from dataclasses import asdict
 from password_generator.generator import generate_password, generate_passwords
 from password_generator.profiles import PROFILES, get_profile
+from password_generator.charsets import CHARSETS, get_charset
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -38,6 +39,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--profile",
         choices=PROFILES.keys(),
         help="Use a predefined password generation profile.",
+    )
+
+    parser.add_argument(
+        "--charset",
+        choices=CHARSETS.keys(),
+        help="Use a predefined character set.",
     )
 
     return parser
@@ -101,20 +108,25 @@ def resolve_generation_config(args: argparse.Namespace) -> dict[str, int | bool]
     """Resolve password generation settings from CLI arguments"""
 
     if args.profile:
-        config = asdict(get_profile(args.profile))
+        profile = get_profile(args.profile)
+        length = profile.length
+        charset_name = profile.charset
     else:
-        config = {
-            "length": args.length or 12,
-            "use_lowercase": True,
-            "use_uppercase": True,
-            "use_numbers": True,
-            "use_symbols": True,
-        }
-    
-    if args.length is not None:
-        config["length"] = args.length
+        length = 12
+        charset_name = "all"
 
-    return config
+    if args.length is not None:
+        length = args.length
+
+    if args.charset is not None:
+        charset_name = args.charset
+
+    charset = get_charset(charset_name)
+
+    return {
+        "length": length,
+        **asdict(charset),
+    }
 
 
 
@@ -122,7 +134,7 @@ def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
 
-    if args.length is None and args.profile is None:
+    if args.length is None and args.profile is None and args.charset is None:
         run_interactive_mode()
         return
     
