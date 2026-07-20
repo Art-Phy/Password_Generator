@@ -10,30 +10,29 @@ class PasswordProfile:
     """Configuration for a predefined password generation profile"""
 
     length: int
-    use_lowercase: bool = True
-    use_uppercase: bool = True
-    use_numbers: bool = True
-    use_symbols: bool = True
+    charset: str
 
 
 
-PROFILES: dict[str, PasswordProfile] = {
+PROFILES = {
     "web": PasswordProfile(
         length=16,
+        charset="all",
     ),
+
     "wifi": PasswordProfile(
         length=24,
-        use_symbols=False,
+        charset="safe",
     ),
+
     "pin": PasswordProfile(
         length=6,
-        use_lowercase=False,
-        use_uppercase=False,
-        use_numbers=True,
-        use_symbols=False,
+        charset="numbers",
     ),
+
     "secure": PasswordProfile(
         length=32,
+        charset="all",
     ),
 }
 
