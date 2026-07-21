@@ -7,12 +7,15 @@ import secrets
 import string
 
 
+AMBIGUOUS_CHARACTERS = frozenset("O0Il1|/\\'\"`")
+
 
 def build_character_pool(
-        use_lowercase: bool = True,
-        use_uppercase: bool = True,
-        use_numbers: bool = True,
-        use_symbols: bool = True,
+        use_lowercase: bool,
+        use_uppercase: bool,
+        use_numbers: bool,
+        use_symbols: bool,
+        exclude_ambiguous: bool = False,
 ) -> str:
     """Build the character pool used to generate passwords"""
 
@@ -29,6 +32,13 @@ def build_character_pool(
 
     if use_symbols:
         characters += string.punctuation
+    
+    if exclude_ambiguous:
+        characters = "".join(
+            character
+            for character in characters
+            if character not in AMBIGUOUS_CHARACTERS
+        )
 
     if not characters:
         raise ValueError("At least one character set must be enabled.")
@@ -43,6 +53,7 @@ def generate_password(
     use_uppercase: bool = True,
     use_numbers: bool = True,
     use_symbols: bool = True,
+    exclude_ambiguous: bool = False,
 ) -> str:
     """Generate a cryptographically secure password"""
 
@@ -54,6 +65,7 @@ def generate_password(
         use_uppercase=use_uppercase,
         use_numbers=use_numbers,
         use_symbols=use_symbols,
+        exclude_ambiguous=exclude_ambiguous,
     )
 
     return "".join(secrets.choice(characters) for _ in range(length))

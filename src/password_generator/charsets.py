@@ -13,6 +13,7 @@ class CharacterSet:
     use_uppercase: bool = True
     use_numbers: bool = True
     use_symbols: bool = True
+    exclude_ambiguous: bool = False
 
 
 CHARSETS: dict[str, CharacterSet] = {
@@ -45,7 +46,9 @@ CHARSETS: dict[str, CharacterSet] = {
         use_symbols=False,
     ),
 
-    "safe": CharacterSet(),
+    "safe": CharacterSet(
+        exclude_ambiguous=True,
+    ),
 }
 
 
