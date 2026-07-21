@@ -3,7 +3,7 @@ import pytest
 
 
 from src.password_generator.generator import generate_password, generate_passwords
-
+from password_generator.generator import AMBIGUOUS_CHARACTERS, generate_password
 
 
 def test_password_length():
@@ -29,3 +29,18 @@ def test_invalid_password_length():
 def test_invalid_password_count():
     with pytest.raises(ValueError):
         generate_passwords(0, 10)
+
+
+
+def test_generate_safe_password_excludes_ambiguous_characters():
+    password = generate_password(
+        length=500,
+        exclude_ambiguous=True,
+    )
+
+    assert len(password) == 500
+
+    assert not any(
+        character in AMBIGUOUS_CHARACTERS
+        for character in password
+    )

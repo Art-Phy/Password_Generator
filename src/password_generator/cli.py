@@ -6,7 +6,11 @@ This module contains the interactive entry point of the application.
 
 import argparse
 
+from dataclasses import asdict
 from password_generator.generator import generate_password, generate_passwords
+from password_generator.profiles import PROFILES, get_profile
+from password_generator.charsets import CHARSETS, get_charset
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -28,6 +32,19 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=1,
         help="Number of passwords to generate.",
+    )
+
+    parser.add_argument(
+        "-p",
+        "--profile",
+        choices=PROFILES.keys(),
+        help="Use a predefined password generation profile.",
+    )
+
+    parser.add_argument(
+        "--charset",
+        choices=CHARSETS.keys(),
+        help="Use a predefined character set.",
     )
 
     return parser
@@ -65,11 +82,21 @@ def run_interactive_mode() -> None:
 
 
 
-def run_cli_mode(length: int, count: int) -> None:
+def run_cli_mode(
+    count: int,
+    config: dict[str, int | bool],
+) -> None:
     passwords = (
-        generate_passwords(count, length)
+        generate_passwords(
+            count=count,
+            **config,
+        )
         if count > 1
-        else [generate_password(length)]
+        else [
+            generate_password(
+                **config,
+            )
+        ]
     )
 
     for password in passwords:
@@ -77,16 +104,47 @@ def run_cli_mode(length: int, count: int) -> None:
 
 
 
+def resolve_generation_config(args: argparse.Namespace) -> dict[str, int | bool]:
+    """Resolve password generation settings from CLI arguments"""
+
+    if args.profile:
+        profile = get_profile(args.profile)
+        length = profile.length
+        charset_name = profile.charset
+    else:
+        length = 12
+        charset_name = "all"
+
+    if args.length is not None:
+        length = args.length
+
+    if args.charset is not None:
+        charset_name = args.charset
+
+    charset = get_charset(charset_name)
+
+    return {
+        "length": length,
+        **asdict(charset),
+    }
+
+
+
 def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
 
-    if args.length is None:
+    if args.length is None and args.profile is None and args.charset is None:
         run_interactive_mode()
         return
     
     try:
-        run_cli_mode(args.length, args.count)
+        config = resolve_generation_config(args)
+
+        run_cli_mode(
+            count=args.count,
+            config=config,
+            )
     except ValueError as error:
         parser.error(str(error))
 

@@ -3,13 +3,13 @@
   <img src="https://img.shields.io/badge/python-3.10+-blue.svg" />
   <img src="https://img.shields.io/badge/CLI-Password%20Generator-orange" />
   <img src="https://img.shields.io/badge/Testing-pytest-green" />
-  <img src="https://img.shields.io/badge/Status-v1.2.0%20Stable-success" />
+  <img src="https://img.shields.io/badge/Status-v1.3.0%20Stable-success" />
   <img src="https://img.shields.io/badge/License-MIT-lightgrey" />
 </p>
 
 Herramienta **CLI desarrollada en Python** para generar contraseñas aleatorias de forma segura mediante el módulo estándar **`secrets`**, tanto de forma interactiva como mediante argumentos desde la terminal.
 
-Ideal como utilidad ligera para generar contraseñas criptográficamente seguras desde cualquier entorno.
+Ideal como utilidad ligera para generar contraseñas criptográficamente seguras mediante perfiles predefinidos o conjuntos de caracteres totalmente configurables.
 
 ---
 
@@ -28,6 +28,9 @@ Ideal como utilidad ligera para generar contraseñas criptográficamente seguras
 - Proyecto organizado siguiendo estructura modular `src/`.
 - Instalación como paquete mediante `pyproject.toml`.
 - Tests automatizados con `pytest`.
+- Perfiles predefinidos para distintos escenarios de uso.
+- Conjuntos de caracteres configurables.
+- Generación de contraseñas seguras excluyendo caracteres visualmente ambiguos.
 
 ---
 
@@ -40,8 +43,10 @@ Password_Generator/
 ├── src/
 │   └── password_generator/
 │       ├── __init__.py
+│       ├── charsets.py
 │       ├── cli.py
-│       └── generator.py
+│       ├── generator.py
+│       └── profiles.py
 ├── tests/
 │   ├── __init__.py
 │   └── test_generator.py
@@ -57,6 +62,8 @@ Password_Generator/
 
 - `cli.py` → interfaz interactiva y argumentos CLI.
 - `generator.py` → lógica de generación de contraseñas.
+- `profiles.py` → perfiles predefinidos de generación.
+- `charsets.py` → definición de conjuntos de caracteres.
 - `tests/` → pruebas automatizadas.
 
 ---
@@ -122,6 +129,56 @@ o
 ```bash
 password-generator -l 20 -c 5
 ```
+---
+
+#### Utilizar un perfil
+
+```bash
+password-generator --profile wifi
+```
+Perfiles disponibles:
+
+```bash
+- `web`
+- `wifi`
+- `pin`
+- `secure`
+```
+
+---
+
+#### Utilizar un conjunto de caracteres
+
+```bash
+password-generator --charset safe
+```
+
+Conjuntos disponibles:
+```bash
+- `all`
+- `letters`
+- `lowercase`
+- `uppercase`
+- `numbers`
+- `alphanumeric`
+- `safe`
+```
+
+---
+
+#### Personalizar un perfil
+
+```bash
+password-generator --profile wifi --length 32
+```
+
+o
+
+```bash
+password-generator --profile wifi --charset letters
+```
+
+Los argumentos de la línea de comandos siempre tienen prioridad sobre los valores predefinidos del perfil.
 
 ---
 
@@ -160,6 +217,7 @@ pytest
 - `argparse`
 - Packaging mediante `pyproject.toml`
 - Testing: `pytest`
+- `dataclasses`
 
 ---
 
@@ -171,10 +229,12 @@ pytest
 - [x] Interactive mode
 - [x] CLI arguments
 - [x] Cryptographically secure password generation
-- [ ] Character set customization
-- [ ] Exclude ambiguous characters
+- [x] Character set customization
+- [x] Exclude ambiguous characters
 - [ ] Password strength indicator
 - [ ] Clipboard support
+- [ ] Export generated passwords
+- [ ] Custom user-defined profiles
 
 ---
 
