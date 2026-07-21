@@ -6,6 +6,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+### [1.3.0] - 2026-07-21
+
+#### Added
+
+- Added predefined password generation profiles:
+    * web
+    * wifi
+    * pin
+    * secure
+- Added configurable character sets through the new --charset option:
+    * all
+    * letters
+    * lowercase
+    * uppercase
+    * numbers
+    * alphanumeric
+    * safe
+- Added support for overriding profile defaults with --length and --charset.
+- Added safe password generation by excluding visually ambiguous characters.
+- Added dedicated tests for safe password generation.
+
+#### Changed
+
+- Refactored password generation to support configurable character types.
+- Simplified password profiles by associating each profile with a predefined character set.
+- Improved configuration resolution between default values, profiles and explicit CLI arguments.
+- Separated password profiles and character-set definitions into dedicated modules.
+
+---
+
 ### [1.2.0] - 2026-06-25
 
 #### Added
