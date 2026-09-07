@@ -3,7 +3,7 @@ import math
 
 import pytest
 
-from password_generator.strength import calculate_entropy
+from password_generator.strength import calculate_entropy, evaluate_strength
 
 
 def test_calculate_entropy():
@@ -31,3 +31,32 @@ def test_calculate_entropy_rejects_invalid_pool_size():
             length=16,
             pool_size=0,
         )
+
+
+
+def test_evaluate_strength_weak():
+    assert evaluate_strength(20) == "Weak"
+
+
+def test_evaluate_strength_medium():
+    assert evaluate_strength(45) == "Medium"
+
+
+def test_evaluate_strength_strong():
+    assert evaluate_strength(70) == "Strong"
+
+
+def test_evaluate_strength_very_strong():
+    assert evaluate_strength(100) == "Very Strong"
+
+
+def test_evaluate_strength_rejects_negative_entropy():
+    with pytest.raises(ValueError):
+        evaluate_strength(-1)
+
+
+
+def test_evaluate_strength_boundaries():
+    assert evaluate_strength(40) == "Medium"
+    assert evaluate_strength(60) == "Strong"
+    assert evaluate_strength(80) == "Very Strong"
