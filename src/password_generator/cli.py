@@ -7,9 +7,10 @@ This module contains the interactive entry point of the application.
 import argparse
 
 from dataclasses import asdict
-from password_generator.generator import generate_password, generate_passwords
+from password_generator.generator import generate_password, generate_passwords, build_character_pool
 from password_generator.profiles import PROFILES, get_profile
 from password_generator.charsets import CHARSETS, get_charset
+from password_generator.strength import calculate_entropy, evaluate_strength
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -47,6 +48,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Use a predefined character set.",
     )
 
+    parser.add_argument(
+        "--show-strength",
+        action="store_true",
+        help="Show estimated password entropy and strength",
+    )
+
     return parser
 
 
@@ -82,9 +89,34 @@ def run_interactive_mode() -> None:
 
 
 
+def calculate_strength_from_config(
+        config: dict[str, int | bool],
+) -> tuple[float, str]:
+    """Calculate entropy and strength from generation settings"""
+
+    characters = build_character_pool(
+        use_lowercase=bool(config["use_lowercase"]),
+        use_uppercase=bool(config["use_uppercase"]),
+        use_numbers=bool(config["use_numbers"]),
+        use_symbols=bool(config["use_symbols"]),
+        exclude_ambiguous=bool(config["exclude_ambiguous"]),
+    )
+
+    entropy = calculate_entropy(
+        length=int(config["length"]),
+        pool_size=len(characters),
+    )
+
+    strength = evaluate_strength(entropy)
+
+    return entropy, strength
+
+
+
 def run_cli_mode(
     count: int,
     config: dict[str, int | bool],
+    show_strength: bool = False,
 ) -> None:
     passwords = (
         generate_passwords(
@@ -101,6 +133,13 @@ def run_cli_mode(
 
     for password in passwords:
         print(password)
+
+    if show_strength:
+        entropy, strength = calculate_strength_from_config(config)
+
+        print()
+        print(f"Entropy: {entropy:.1f} bits")
+        print(f"Strength: {strength}")
 
 
 
@@ -144,6 +183,7 @@ def main() -> None:
         run_cli_mode(
             count=args.count,
             config=config,
+            show_strength=args.show_strength,
             )
     except ValueError as error:
         parser.error(str(error))
