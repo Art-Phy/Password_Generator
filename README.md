@@ -1,15 +1,16 @@
 
+# Password Generator
+
 <p align="left">
   <img src="https://img.shields.io/badge/python-3.10+-blue.svg" />
   <img src="https://img.shields.io/badge/CLI-Password%20Generator-orange" />
   <img src="https://img.shields.io/badge/Testing-pytest-green" />
-  <img src="https://img.shields.io/badge/Status-v1.3.0%20Stable-success" />
-  <img src="https://img.shields.io/badge/License-MIT-lightgrey" />
+  <img src="https://img.shields.io/badge/Status-v1.4.0%20Stable-success" />
 </p>
 
 Herramienta **CLI desarrollada en Python** para generar contraseñas aleatorias de forma segura mediante el módulo estándar **`secrets`**, tanto de forma interactiva como mediante argumentos desde la terminal.
 
-Ideal como utilidad ligera para generar contraseñas criptográficamente seguras mediante perfiles predefinidos o conjuntos de caracteres totalmente configurables.
+Permite utilizar perfiles predefinidos, seleccionar distintos conjuntos de caracteres y consultar la entropía estimada y fortaleza de las contraseñas generadas.
 
 ---
 
@@ -18,25 +19,28 @@ Ideal como utilidad ligera para generar contraseñas criptográficamente seguras
 #### Core
 
 - Generación de una o varias contraseñas aleatorias.
-- Generación mediante el módulo **`secrets`** de Python para mayor seguridad.
+- Generación criptográficamente segura mediante el módulo **`secrets`** de Python.
 - Longitud de contraseña configurable.
 - Número de contraseñas configurable.
 - Modo interactivo guiado.
 - Ejecución mediante argumentos CLI.
+- Perfiles predefinidos para distintos escenarios de uso.
+- Conjuntos de caracteres configurables mediante `--charset`.
+- Generación segura excluyendo caracteres visualmente ambiguos.
+- Estimación de entropía basada en longitud y tamaño del conjunto de caracteres.
+- Clasificación de fortaleza de las contraseñas generadas.
+- Visualización opcional de entropía y fortaleza mediante `--show-strength`.
 - Validación automática de parámetros de entrada.
 - Manejo de errores mediante excepciones.
 - Proyecto organizado siguiendo estructura modular `src/`.
 - Instalación como paquete mediante `pyproject.toml`.
 - Tests automatizados con `pytest`.
-- Perfiles predefinidos para distintos escenarios de uso.
-- Conjuntos de caracteres configurables.
-- Generación de contraseñas seguras excluyendo caracteres visualmente ambiguos.
 
 ---
 
 ### Project Structure
 
-Proyecto reorganizado siguiendo una estructura modular profesional:
+Proyecto organizado siguiendo una estructura modular:
 
 ```text
 Password_Generator/
@@ -46,10 +50,12 @@ Password_Generator/
 │       ├── charsets.py
 │       ├── cli.py
 │       ├── generator.py
-│       └── profiles.py
+│       ├── profiles.py
+│       └── strength.py
 ├── tests/
 │   ├── __init__.py
-│   └── test_generator.py
+│   ├── test_generator.py
+│   └── test_strength.py
 ├── CHANGELOG.md
 ├── LICENSE.md
 ├── README.md
@@ -60,10 +66,11 @@ Password_Generator/
 
 #### Separación de responsabilidades
 
-- `cli.py` → interfaz interactiva y argumentos CLI.
+- `cli.py` → interfaz interactiva, argumentos CLI y resolución de configuración.
 - `generator.py` → lógica de generación de contraseñas.
 - `profiles.py` → perfiles predefinidos de generación.
-- `charsets.py` → definición de conjuntos de caracteres.
+- `charsets.py` → definición y configuración de conjuntos de caracteres.
+- `strength.py` → cálculo de entropía y clasificación de fortaleza.
 - `tests/` → pruebas automatizadas.
 
 ---
@@ -124,65 +131,190 @@ password-generator -l 20
 password-generator --length 20 --count 5
 ```
 
-o
+o:
 
 ```bash
 password-generator -l 20 -c 5
 ```
+
 ---
+
+### Password Profiles
+
+La herramienta incluye perfiles predefinidos para distintos escenarios de uso.
+
+| Profile | Longitud | Charset | Uso |
+|---|---:|---|---|
+| `web` | 16 | `all` | Contraseña de uso general |
+| `wifi` | 24 | `safe` | Contraseña Wi-Fi evitando caracteres ambiguos |
+| `pin` | 6 | `numbers` | PIN numérico |
+| `secure` | 32 | `all` | Contraseña de alta seguridad |
 
 #### Utilizar un perfil
 
 ```bash
+password-generator --profile web
+```
+
+```bash
 password-generator --profile wifi
 ```
-Perfiles disponibles:
 
 ```bash
-- `web`
-- `wifi`
-- `pin`
-- `secure`
+password-generator --profile pin
+```
+
+```bash
+password-generator --profile secure
+```
+
+Los valores definidos por un perfil pueden sobrescribirse mediante argumentos CLI.
+
+Por ejemplo, generar un PIN de 8 dígitos:
+
+```bash
+password-generator --profile pin --length 8
+```
+
+O utilizar el perfil Wi-Fi con otro conjunto de caracteres:
+
+```bash
+password-generator --profile wifi --charset alphanumeric
 ```
 
 ---
 
-#### Utilizar un conjunto de caracteres
+### Character Sets
+
+El argumento `--charset` permite seleccionar qué tipo de caracteres pueden utilizarse durante la generación.
+
+| Charset | Descripción |
+|---|---|
+| `all` | Letras minúsculas, mayúsculas, números y símbolos |
+| `letters` | Letras minúsculas y mayúsculas |
+| `lowercase` | Solo letras minúsculas |
+| `uppercase` | Solo letras mayúsculas |
+| `numbers` | Solo números |
+| `alphanumeric` | Letras y números |
+| `safe` | Todos los tipos de caracteres excluyendo caracteres visualmente ambiguos |
+
+Ejemplo:
 
 ```bash
-password-generator --charset safe
+password-generator --charset letters --length 20
 ```
 
-Conjuntos disponibles:
+Generar una contraseña alfanumérica:
+
 ```bash
-- `all`
-- `letters`
-- `lowercase`
-- `uppercase`
-- `numbers`
-- `alphanumeric`
-- `safe`
+password-generator --charset alphanumeric --length 24
+```
+
+Generar una contraseña utilizando el conjunto seguro:
+
+```bash
+password-generator --charset safe --length 24
+```
+
+El charset `safe` excluye caracteres que pueden confundirse visualmente:
+
+```text
+O 0 I l 1 | / \ ' " `
 ```
 
 ---
 
-#### Personalizar un perfil
+### Password Strength
+
+La versión `v1.4.0` incorpora estimación de entropía y clasificación de fortaleza para las contraseñas generadas.
+
+Para mostrar esta información utiliza:
 
 ```bash
-password-generator --profile wifi --length 32
+password-generator --profile secure --show-strength
 ```
 
-o
+Ejemplo de salida:
+
+```text
+<generated-password>
+
+Entropy: 209.8 bits
+Strength: Very Strong
+```
+
+También puede combinarse con cualquier longitud, perfil o conjunto de caracteres:
 
 ```bash
-password-generator --profile wifi --charset letters
+password-generator \
+  --charset safe \
+  --length 24 \
+  --show-strength
 ```
 
-Los argumentos de la línea de comandos siempre tienen prioridad sobre los valores predefinidos del perfil.
+La fortaleza se clasifica en cuatro niveles:
+
+| Entropía estimada | Clasificación |
+|---:|---|
+| Menos de 40 bits | `Weak` |
+| 40 - 59.9 bits | `Medium` |
+| 60 - 79.9 bits | `Strong` |
+| 80 bits o más | `Very Strong` |
+
+La entropía se estima teniendo en cuenta la longitud solicitada y el tamaño real del conjunto de caracteres utilizado durante la generación.
+
+> [!NOTE]
+> La estimación de entropía está diseñada para las contraseñas aleatorias generadas por esta herramienta a partir de un conjunto conocido de caracteres.
+>
+> No pretende funcionar como un analizador universal de contraseñas creadas manualmente por usuarios.
 
 ---
 
-#### Ayuda CLI
+### Combinaciones
+
+Los perfiles, conjuntos de caracteres, longitud y análisis de fortaleza pueden combinarse libremente.
+
+Contraseña Wi-Fi de 32 caracteres:
+
+```bash
+password-generator \
+  --profile wifi \
+  --length 32
+```
+
+PIN de 8 dígitos mostrando su fortaleza:
+
+```bash
+password-generator \
+  --profile pin \
+  --length 8 \
+  --show-strength
+```
+
+Generar cinco contraseñas seguras:
+
+```bash
+password-generator \
+  --charset safe \
+  --length 24 \
+  --count 5
+```
+
+Generar tres contraseñas alfanuméricas mostrando su entropía:
+
+```bash
+password-generator \
+  --charset alphanumeric \
+  --length 20 \
+  --count 3 \
+  --show-strength
+```
+
+---
+
+### Ayuda CLI
+
+Para consultar todos los argumentos disponibles:
 
 ```bash
 password-generator --help
@@ -197,6 +329,16 @@ Ejecutar todos los tests:
 ```bash
 pytest
 ```
+
+La suite cubre, entre otros:
+
+- Generación individual de contraseñas.
+- Generación múltiple.
+- Validación de parámetros.
+- Exclusión de caracteres ambiguos.
+- Cálculo de entropía.
+- Clasificación de fortaleza.
+- Valores límite de las distintas clasificaciones.
 
 ---
 
@@ -215,9 +357,10 @@ pytest
 - `secrets`
 - `string`
 - `argparse`
+- `dataclasses`
+- `math`
 - Packaging mediante `pyproject.toml`
 - Testing: `pytest`
-- `dataclasses`
 
 ---
 
@@ -231,7 +374,8 @@ pytest
 - [x] Cryptographically secure password generation
 - [x] Character set customization
 - [x] Exclude ambiguous characters
-- [ ] Password strength indicator
+- [x] Predefined password profiles
+- [x] Password strength indicator
 - [ ] Clipboard support
 - [ ] Export generated passwords
 - [ ] Custom user-defined profiles

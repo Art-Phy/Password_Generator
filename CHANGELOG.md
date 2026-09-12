@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+### [1.4.0] - 2026-09-11
+
+#### Added
+
+- Added password entropy estimation based on password length and character pool size.
+- Added password strength classification with four levels:
+    - `Weak`
+    - `Medium`
+    - `Strong`
+    - `Very Strong`
+- Added the `--show-strength` CLI option to display estimated entropy and password strength.
+- Added dedicated tests for entropy calculation and strength classification.
+- Added boundary tests for strength rating thresholds
+
+#### Changed
+
+- Extended the CLI to calculate password strength using the actual character set selected for generation.
+- Password strength estimation now respects profiles, custom characater sets, safe mode, and custom password lengths.
+- Kept strength analysis optional to preserve clean default CLI output.
+
+---
+
 ### [1.3.0] - 2026-07-21
 
 #### Added
