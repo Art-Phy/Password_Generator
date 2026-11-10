@@ -9,6 +9,9 @@ authors = [
     {name = "Art-Phy"}
 ]
 license = {text = "MIT"}
+dependencies = [
+    "pyperclip>1.9",
+]
 
 [project.scripts]
 password-generator = "password_generator.cli:main"
