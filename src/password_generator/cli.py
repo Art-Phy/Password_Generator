@@ -11,6 +11,7 @@ from password_generator.generator import generate_password, generate_passwords, 
 from password_generator.profiles import PROFILES, get_profile
 from password_generator.charsets import CHARSETS, get_charset
 from password_generator.strength import calculate_entropy, evaluate_strength
+from password_generator.clipboard import copy_password
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -52,6 +53,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--show-strength",
         action="store_true",
         help="Show estimated password entropy and strength",
+    )
+
+    parser.add_argument(
+        "--copy",
+        action="store_true",
+        help="Copy the generated password to the clipboard without displaying it"
     )
 
     return parser
@@ -117,22 +124,29 @@ def run_cli_mode(
     count: int,
     config: dict[str, int | bool],
     show_strength: bool = False,
+    copy: bool = False,
 ) -> None:
-    passwords = (
-        generate_passwords(
-            count=count,
-            **config,
-        )
-        if count > 1
-        else [
-            generate_password(
-                **config,
-            )
-        ]
-    )
+    """Generate passwords and optionally display strength or copy"""
 
-    for password in passwords:
-        print(password)
+    if copy and count != 1:
+        raise ValueError(
+            "--copy only supports generating one password"
+        )
+
+    if copy:
+        password = generate_password(**config)
+        copy_password(password)
+        print("Password copied to clipboard")
+
+    else:
+        passwords = (
+            generate_passwords(count= count, **config)
+            if count > 1
+            else [generate_password(**config)]
+        )
+
+        for password in passwords:
+            print(password)
 
     if show_strength:
         entropy, strength = calculate_strength_from_config(config)
@@ -173,10 +187,16 @@ def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
 
-    if args.length is None and args.profile is None and args.charset is None:
+    if (
+         args.length is None 
+        and args.profile is None
+        and args.charset is None
+        and not args.show_strength
+        and not args.copy
+    ):    
         run_interactive_mode()
         return
-    
+
     try:
         config = resolve_generation_config(args)
 
@@ -184,9 +204,14 @@ def main() -> None:
             count=args.count,
             config=config,
             show_strength=args.show_strength,
-            )
+            copy=args.copy,
+        )
+        
     except ValueError as error:
         parser.error(str(error))
+
+    except RuntimeError as error:
+        parser.exit(status=1, message=f"Error: {error}\n")
 
 
 if __name__ == "__main__":

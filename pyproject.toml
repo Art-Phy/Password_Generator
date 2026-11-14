@@ -1,7 +1,7 @@
 
 [project]
 name = "password-generator"
-version = "1.4.0"
+version = "1.5.0"
 description = "Secure password generator built with Python."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -9,6 +9,9 @@ authors = [
     {name = "Art-Phy"}
 ]
 license = {text = "MIT"}
+dependencies = [
+    "pyperclip>1.9",
+]
 
 [project.scripts]
 password-generator = "password_generator.cli:main"

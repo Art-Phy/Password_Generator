@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
+### [1.5.0] - 2026-11-14
+
+#### Added
+
+- Added clipboard support through the new `--copy` CLI option.
+- Added the `clipboard.py` module for system clipboard integration using `pyperclip`.
+- Added support for combining `--copy` with password profiles, character sets, and custom lengths.
+- Added support for displaying password entropy and strength alongside clipboard operations using `--show-strength`.
+- Added dedicated tests for clipboard functionality and CLI integration.
+- Added error handling for unavailable or unsupported system clipboards.
+
+#### Changed
+
+- Updated the CLI to copy generated passwords without displaying their contents in the terminal when using `--copy`.
+- Restricted clipboard operations to a single password per execution.
+- Improved CLI argument validation to reject incompatible combinations of `--copy` and multiple passwords.
+- Extended CLI error handling to provide clear messages when clipboard operations fail.
+- Added `pyperclip` as a project dependency.
+- Preserved the existing password generation behavior when clipboard support is not requested.
+
+---
+
 ### [1.4.0] - 2026-09-11
 
 #### Added
